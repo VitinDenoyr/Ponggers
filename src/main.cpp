@@ -15,29 +15,27 @@ int main(int argc, char **argv)
     {
         std::cout << "Falha na inicialização do SDL_Ttf. Erro: " << SDL_GetError() << std::endl;
     }
-
-    // Criar janela principal e classe de configurações do jogo
-    RenderWindow window("Ponggers", SCREENWIDTH, SCREENHEIGHT);
-
-    // Carregar Recursos Usados (Menu + Jogo)
-    bool runstate = true;
-    TTF_Font *font = TTF_OpenFont("res/fonts/Peepo.ttf", 36);
-    SDL_Color color_white = {255,255,255,0};
-    if(font == NULL){
-        std::cout << "Falha no carregamento da fonte."<< std::endl;
+    if (Mix_Init(MIX_INIT_MP3) FAIL_MIX || Mix_OpenAudio(MIX_DEFAULT_FREQUENCY,MIX_DEFAULT_FORMAT,MIX_DEFAULT_CHANNELS,2048) < 0)
+    {
+        std::cout << "Falha na inicialização do SDL_Mixer. Erro: " << SDL_GetError() << std::endl;
     }
 
-    // Menu
-    Game game(SCREENWIDTH, SCREENHEIGHT, window);
-    while(runstate){
-        runstate = menu(window,game);
-        if(runstate){ //Se o menu retornar que foi clicado em jogar, cria um jogo
-            runstate = pong(window, game); //Decide se o jogo termina aqui ou volta pro menu
+    // Carregar recursos
+    bool runstate = true;
+    SDL_Color color_white = {255,255,255,0};
+    RenderWindow window("Ponggers",960,540);
+
+    // Loop
+    while(runstate)
+    {
+        runstate = menu(window);
+        if(runstate){ 
+            runstate = pong(window);
         }
     }
 
     // Encerramento
-    window.memoryClear();
+    Mix_Quit();
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
