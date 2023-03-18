@@ -18,10 +18,13 @@ public:
 
 class Paddle : public Entity
 {
+private:
+    int spd;
 public:
     Paddle(Vector2f p_pos, SDL_Texture* p_texture) : Entity(p_pos, p_texture){};
-    void move(float p_y);
+    void move(int p_dir);
     void mid();
+    void setspeed(int p_speed);
 };
 
 class Ball : public Entity

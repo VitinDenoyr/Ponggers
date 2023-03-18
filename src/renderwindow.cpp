@@ -41,6 +41,8 @@ void RenderWindow::textureStart(){
     tex.push_back(loadTexture("res/images/buttons/altbox_4.png"));
     tex.push_back(loadTexture("res/images/buttons/altbox_5.png"));
     tex.push_back(loadTexture("res/images/buttons/altbox_0.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_right.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_left.png"));
     // Criar texturas por texto/superfície
     std::vector<SDL_Surface*> temp_s = 
     {
@@ -58,7 +60,9 @@ void RenderWindow::textureStart(){
         TTF_RenderText_Solid(font,":",white_color),
         TTF_RenderText_Solid(font,"Velocidade inicial",white_color),
         TTF_RenderText_Solid(font,"Aumento de velocidade",white_color),
-        TTF_RenderText_Solid(font,"Sentido inicial da bola",white_color)
+        TTF_RenderText_Solid(font,"Sentido inicial da bola",white_color),
+        TTF_RenderText_Solid(font,"Jogar contra IA",white_color),
+        TTF_RenderText_Solid(font,"Velocidade do jogador",white_color)
     };
     for(SDL_Surface* s : temp_s){
         tex.push_back(loadTexture(s));

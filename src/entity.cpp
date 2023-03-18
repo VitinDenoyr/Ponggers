@@ -22,18 +22,23 @@ void Entity::setTexture(SDL_Texture* p_texture)
     texture = p_texture;
 }
 
-void Paddle::move(float p_y){
-    if(getPos().y + p_y < 0){
+void Paddle::move(int p_dir){
+    int v[5] = {2,3,4,6,8};
+    if(getPos().y + p_dir*v[spd-1] < 0){
         getPos().y = 0;
-    } else if(getPos().y + p_y > 440){
+    } else if(getPos().y + p_dir*v[spd-1] > 440){
         getPos().y = 440; 
     } else {
-        getPos().y += p_y;
+        getPos().y += p_dir*v[spd-1];
     }
 }
 
 void Paddle::mid(){
     getPos().y = 220;
+}
+
+void Paddle::setspeed(int p_speed){
+    spd = p_speed;
 }
 
 void Ball::mid()

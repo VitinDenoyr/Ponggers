@@ -24,15 +24,27 @@ bool settings(RenderWindow &window, Game &game){
         Entity(Vector2f((window.getPos().w-30 - 800)/2,210,30,30),window.tex[ALT_RANDOM]),
         Entity(Vector2f((window.getPos().w-30 - 800 + 90)/2,205,288,36),window.tex[BALL_DIRECTION]),
 
+        Entity(Vector2f((window.getPos().w+3 + 15)/2,210,30,30),window.tex[MARKBOX]),
+        Entity(Vector2f((window.getPos().w+3 + 15 + 90)/2,205,210,36),window.tex[PLAY_AGAINST_AI]),
+
+        Entity(Vector2f((window.getPos().w-30 - 800)/2,260,30,30),window.tex[ALT_3]),
+        Entity(Vector2f((window.getPos().w-30 - 800 + 90)/2,255,298,36),window.tex[PLAYER_SPEED]),
+
         Entity(Vector2f((window.getPos().w-310)/2,2,310,80),window.tex[TITULO_CONFIGURAR])
     };
 
-    // Deixa as Markboxes certas
+    // Deixa as boxes certas
     if(game.basicPowers) entities[2].setTexture(window.tex[MARKEDBOX]);
     if(game.specialPowers) entities[4].setTexture(window.tex[MARKEDBOX]);
     entities[6].setTexture(window.tex[ALT_RANDOM + game.speed_level]);
     entities[8].setTexture(window.tex[ALT_1 + game.speed_increaser]);
-    entities[10].setTexture(window.tex[ALT_RANDOM + game.direction]);
+    if(game.direction > 0){
+        entities[10].setTexture(window.tex[ALT_R + game.direction - 1]);
+    } else {
+        entities[10].setTexture(window.tex[ALT_RANDOM]);
+    }
+    if(game.use_ia) entities[12].setTexture(window.tex[MARKEDBOX]);
+    entities[14].setTexture(window.tex[ALT_RANDOM + game.player_speed]);
 
     // Loop
     FPS fps;
@@ -51,8 +63,10 @@ bool settings(RenderWindow &window, Game &game){
             bool condition_alt_velinit = setarea(entities[6]);
             bool condition_alt_veladder = setarea(entities[8]);
             bool condition_alt_dir = setarea(entities[10]);
+            bool condition_inteli = setarea(entities[12]);
+            bool condition_player_speed = setarea(entities[14]);
             
-            if(condition_is_in_leave || condition_config_1 || condition_config_2 || condition_alt_veladder || condition_alt_velinit || condition_alt_dir){
+            if(condition_is_in_leave || condition_config_1 || condition_config_2 || condition_alt_veladder || condition_alt_velinit || condition_alt_dir || condition_inteli || condition_player_speed){
                 SDL_SetCursor(cursor_hand);
             } else {
                 SDL_SetCursor(cursor_arrow);
@@ -101,8 +115,25 @@ bool settings(RenderWindow &window, Game &game){
                         game.direction++;
                         if(game.direction >= 3){
                             game.direction = 0;
+                            entities[10].setTexture(window.tex[ALT_RANDOM]);
+                        } else {
+                            entities[10].setTexture(window.tex[ALT_R + game.direction - 1]);
                         }
-                        entities[10].setTexture(window.tex[ALT_RANDOM + game.direction]);
+
+                    } else if(condition_inteli){
+                        game.use_ia = !game.use_ia;
+                        if(game.use_ia){
+                            entities[12].setTexture(window.tex[MARKEDBOX]);
+                        } else {
+                            entities[12].setTexture(window.tex[MARKBOX]);
+                        }
+
+                    } else if(condition_player_speed){
+                        game.player_speed++;
+                        if(game.player_speed >= 6){
+                            game.player_speed = 1;
+                        }
+                        entities[14].setTexture(window.tex[ALT_RANDOM + game.player_speed]);
 
                     }
                 }

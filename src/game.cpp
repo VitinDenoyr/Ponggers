@@ -2,6 +2,7 @@
 
 void Game::reset(Ball &p_Ball, Paddle &p_p1, Paddle &p_p2){
     p_Ball.mid(); p_p1.mid(); p_p2.mid();
+    p_Ball.setTexture(window.tex[BALL_W]);
     hasLaunched = 0;
 }
 
@@ -10,8 +11,10 @@ bool Game::gamestate(){
 }
 
 void Game::start(Ball &p_ball){
-    float strt_spd[6] = {1.0f, 1.25f, 2.10f, 3.00f, 4.10f, 5.25f};
-    float strt_dir[3] = {1,1,-1};
+    long long int rn1 = SDL_GetTicks64()%5, rn2 = 2*(SDL_GetTicks64()%2) - 1;
+    float choose[5] = {1.25f, 2.10f, 3.00f, 4.10f, 5.25f};
+    float strt_spd[6] = {choose[rn1], 1.25f, 2.10f, 3.00f, 4.10f, 5.25f};
+    int strt_dir[3] = {(int)rn2,1,-1};
     hasLaunched = 1;
     p_ball.setspeed((strt_dir[direction])*(strt_spd[speed_level]*1.25f),0.05f);
 }
@@ -29,6 +32,7 @@ void Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
     if(cdt_passed_p1){ 
         if(cdt_fronts_p1){ 
             audio.playSound(SOUND_Collision,0);
+            p_ball.setTexture(window.tex[BALL_B]);
             p_ball.getPos().x = 46;
             p_ball.getxs() *= -1 * spi[speed_increaser];
             if(std::abs(p_ball.getxs()) <= 60){
@@ -42,6 +46,7 @@ void Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
     } else if(cdt_passed_p2){
         if(cdt_fronts_p2){
             audio.playSound(SOUND_Collision,0);
+            p_ball.setTexture(window.tex[BALL_R]);
             p_ball.getPos().x = 898;
             p_ball.getxs() *= -1 * spi[speed_increaser];
             if(std::abs(p_ball.getxs()) <= 60){

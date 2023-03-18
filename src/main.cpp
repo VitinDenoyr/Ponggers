@@ -32,7 +32,7 @@ int main(int argc, char **argv)
         "res/sounds/point.wav"
     };
     Audio audio(100,sounds,musics);
-    Game game(audio);
+    Game game(audio, window);
 
     // Loop
     while(runstate)
