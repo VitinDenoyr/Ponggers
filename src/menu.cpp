@@ -1,6 +1,6 @@
 #include "Menu.hpp"
 
-bool menu(RenderWindow &window)
+bool menu(RenderWindow &window, Game &game, Audio &audio)
 {
     // Recursos usados
     SDL_Cursor* cursor_hand = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
@@ -22,9 +22,9 @@ bool menu(RenderWindow &window)
             int mousex, mousey;
             SDL_GetMouseState(&mousex,&mousey);
 
-            bool condition_is_in_start = mousex >= btn_jogar.getPos().x && mousey >= btn_jogar.getPos().y && mousex <= btn_jogar.getPos().x+btn_jogar.getPos().w && mousey <= btn_jogar.getPos().y+btn_jogar.getPos().h;
-            bool condition_is_in_controls = mousex >= btn_controls.getPos().x && mousey >= btn_controls.getPos().y && mousex <= btn_controls.getPos().x+btn_controls.getPos().w && mousey <= btn_controls.getPos().y+btn_controls.getPos().h;
-            bool condition_is_in_config = mousex >= btn_config.getPos().x && mousey >= btn_config.getPos().y && mousex <= btn_config.getPos().x+btn_config.getPos().w && mousey <= btn_config.getPos().y+btn_config.getPos().h;
+            bool condition_is_in_start = setarea(btn_jogar);
+            bool condition_is_in_controls = setarea(btn_controls);
+            bool condition_is_in_config = setarea(btn_config);
             
             if(condition_is_in_start || condition_is_in_config || condition_is_in_controls){
                 SDL_SetCursor(cursor_hand);
@@ -41,8 +41,8 @@ bool menu(RenderWindow &window)
                         return 1;
                     } else if(condition_is_in_config){
                         SDL_SetCursor(cursor_arrow);
-                        //bool will_play = settings(window); //Vai para as configurações
-                        //if(!will_play) return 0;
+                        bool will_play = settings(window,game); //Vai para as configurações
+                        if(!will_play) return 0;
                     } else if(condition_is_in_controls){
                         SDL_SetCursor(cursor_arrow);
                         bool will_play = controls(window);

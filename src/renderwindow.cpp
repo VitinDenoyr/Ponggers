@@ -17,17 +17,7 @@ void RenderWindow::textureStart(){
     SDL_Color logo_color = {185, 215, 255, 0};
     SDL_Color white_color = {255, 255, 255, 0};
 
-    // Criar superfícies para texturas por texto
-    std::vector<SDL_Surface*> temp_s = 
-    {
-        TTF_RenderText_Solid(font,"P O N G G E R S",logo_color),
-        TTF_RenderText_Solid(font,"Controles",white_color),
-        TTF_RenderText_Solid(font,"Mover jogador 1",white_color),
-        TTF_RenderText_Solid(font,"Mover jogador 2",white_color),
-        TTF_RenderText_Solid(font,"Ativar movimento da bola",white_color),
-        TTF_RenderText_Solid(font,"Voltar ao menu principal",white_color)
-    };
-    // Criar texturas por imagem e por texto
+    // Criar texturas por imagem
     tex.push_back(loadTexture("res/images/buttons/button_play.png"));
     tex.push_back(loadTexture("res/images/buttons/button_config.png"));
     tex.push_back(loadTexture("res/images/buttons/button_controls.png"));
@@ -36,9 +26,57 @@ void RenderWindow::textureStart(){
     tex.push_back(loadTexture("res/images/controls/spacebar.png"));
     tex.push_back(loadTexture("res/images/controls/esc.png"));
     tex.push_back(loadTexture("res/images/buttons/button_return.png"));
+    tex.push_back(loadTexture("res/images/buttons/click.png"));
+    tex.push_back(loadTexture("res/images/buttons/clicked.png"));
+    tex.push_back(loadTexture("res/images/grade.png"));
+    tex.push_back(loadTexture("res/images/pong/ball_red.png"));
+    tex.push_back(loadTexture("res/images/pong/ball_blue.png"));
+    tex.push_back(loadTexture("res/images/pong/ball.png"));
+    tex.push_back(loadTexture("res/images/pong/player_1.png"));
+    tex.push_back(loadTexture("res/images/pong/player_2.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_rng.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_1.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_2.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_3.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_4.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_5.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_0.png"));
+    // Criar texturas por texto/superfície
+    std::vector<SDL_Surface*> temp_s = 
+    {
+        TTF_RenderText_Solid(font,"P O N G G E R S",logo_color),
+        TTF_RenderText_Solid(font,"Controles",white_color),
+        TTF_RenderText_Solid(font,"Mover jogador 1",white_color),
+        TTF_RenderText_Solid(font,"Mover jogador 2",white_color),
+        TTF_RenderText_Solid(font,"Ativar movimento da bola",white_color),
+        TTF_RenderText_Solid(font,"Voltar ao menu principal",white_color),
+        TTF_RenderText_Solid(font,"Configurar",white_color),
+        TTF_RenderText_Solid(font,"Poderes basicos",white_color),
+        TTF_RenderText_Solid(font,"Poderes especiais",white_color),
+        TTF_RenderText_Solid(font,"0",white_color),
+        TTF_RenderText_Solid(font,"0",white_color),
+        TTF_RenderText_Solid(font,":",white_color),
+        TTF_RenderText_Solid(font,"Velocidade inicial",white_color),
+        TTF_RenderText_Solid(font,"Aumento de velocidade",white_color),
+        TTF_RenderText_Solid(font,"Sentido inicial da bola",white_color)
+    };
     for(SDL_Surface* s : temp_s){
         tex.push_back(loadTexture(s));
     }
+}
+
+void RenderWindow::scoreUpdate(int p_score1, int p_score2, Entity &p_ent1, Entity &p_ent2){
+    SDL_Color white_color = {255, 255, 255, 0};
+    std::stringstream txt_s1; txt_s1 << p_score1;
+    std::stringstream txt_s2; txt_s2 << p_score2;
+    SDL_Surface* surface_s1 = TTF_RenderText_Solid(font, txt_s1.str().c_str(), white_color);
+    SDL_Surface* surface_s2 = TTF_RenderText_Solid(font, txt_s2.str().c_str(), white_color);
+    SDL_DestroyTexture(tex[SCORE1]); SDL_DestroyTexture(tex[SCORE2]);
+    tex[SCORE1] = SDL_CreateTextureFromSurface(renderer,surface_s1);
+    tex[SCORE2] = SDL_CreateTextureFromSurface(renderer,surface_s2);
+    SDL_FreeSurface(surface_s1); SDL_FreeSurface(surface_s2);
+    p_ent1 = Entity(Vector2f((getPos().w - 36 - 70 - 72*(txt_s1.str().length()-1))/2, 10, 36*(int)(txt_s1.str().length()) , 60),tex[SCORE1]);
+    p_ent2 = Entity(Vector2f((getPos().w - 36 + 70)/2, 10, 36*(int)(txt_s2.str().length()) , 60),tex[SCORE2]);
 }
 
 RenderWindow::~RenderWindow(){

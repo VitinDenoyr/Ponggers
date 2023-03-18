@@ -12,12 +12,12 @@ void FPS::start(){
 void FPS::update(){
     lastFrame = currentFrame;
     currentFrame = SDL_GetTicks64();
-    superior_frame_amount = std::ceil((currentFrame - lastFrame + 1) / frameDuration);
-    superior_remainder = (superior_frame_amount * (frameDuration) - (currentFrame - lastFrame));
+    superior_frame_amount = std::ceil((currentFrame - lastFrame + 1) / frameDuration); //mínimo de frames que demorariam >= tempo levado desde ultimo frame
+    superior_remainder = (superior_frame_amount * (frameDuration) - (currentFrame - lastFrame)); //diferença entre tempo teórico da variável acima e o tempo levado de fato
 }
 
 void FPS::delay(){
-    float delayTime = std::max(0, (int)std::floor(superior_remainder - (SDL_GetTicks64() - currentFrame))); // Completar as operações anteriores - tempo ja gasto
+    float delayTime = std::max(0, (int)std::floor(superior_remainder - (SDL_GetTicks64() - currentFrame))); //completa o tempo suposto para a variável superior_frame_amount
     SDL_Delay(delayTime);
     currentFrame = SDL_GetTicks64();
 }

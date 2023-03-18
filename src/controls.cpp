@@ -2,6 +2,8 @@
 
 bool controls(RenderWindow &window){
     //Recursos usados
+    SDL_Cursor* cursor_hand = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+    SDL_Cursor* cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
     std::vector<Entity> entities = {
         Entity(Vector2f((window.getPos().w-280)/2,2,280,80),window.tex[TITULO_CONTROLES]),
         Entity(Vector2f((window.getPos().w-180)/2,112,290,50),window.tex[TXT_MOVE1]),
@@ -27,12 +29,12 @@ bool controls(RenderWindow &window){
             int mousex, mousey;
             SDL_GetMouseState(&mousex,&mousey);
 
-            bool condition_is_in_leave = mousex >= entities[9].getPos().x && mousey >= entities[9].getPos().y && mousex <= entities[9].getPos().x+entities[9].getPos().w && mousey <= entities[9].getPos().y+entities[9].getPos().h;
+            bool condition_is_in_leave = setarea(entities[9]);
             
             if(condition_is_in_leave){
-                SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND));
+                SDL_SetCursor(cursor_hand);
             } else {
-                SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
+                SDL_SetCursor(cursor_arrow);
             }
 
             while(SDL_PollEvent(&ev)){
@@ -40,7 +42,7 @@ bool controls(RenderWindow &window){
                     return 0;
                 } else if(ev.type == SDL_MOUSEBUTTONDOWN && ev.button.button == SDL_BUTTON_LEFT){
                     if(condition_is_in_leave){
-                        SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
+                        SDL_SetCursor(cursor_arrow);
                         contstate = 0;
                     }
                 }
@@ -48,7 +50,7 @@ bool controls(RenderWindow &window){
             const Uint8 *keyboard = SDL_GetKeyboardState(NULL);
             if (keyboard[SDL_SCANCODE_ESCAPE])
             {
-                SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
+                SDL_SetCursor(cursor_arrow);
                 contstate = 0;
             }
         }

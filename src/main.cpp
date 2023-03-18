@@ -24,13 +24,22 @@ int main(int argc, char **argv)
     bool runstate = true;
     SDL_Color color_white = {255,255,255,0};
     RenderWindow window("Ponggers",960,540);
+    std::vector<const char*> musics = {
+
+    };
+    std::vector<const char*> sounds = {
+        "res/sounds/collision.wav",
+        "res/sounds/point.wav"
+    };
+    Audio audio(100,sounds,musics);
+    Game game(audio);
 
     // Loop
     while(runstate)
     {
-        runstate = menu(window);
+        runstate = menu(window,game,audio);
         if(runstate){ 
-            runstate = pong(window);
+            runstate = pong(window,game,audio);
         }
     }
 
