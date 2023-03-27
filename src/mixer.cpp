@@ -45,15 +45,19 @@ int Audio::loadSound(const char* p_file){
 }
 
 void Audio::playMusic(int p_music, int p_loopAmount){
-    if(!Mix_PlayingMusic){
-        Mix_Volume(1,volume);
-        Mix_PlayMusic(musics[p_music],p_loopAmount);
-    }
+    Mix_VolumeMusic(volume);
+    Mix_PlayMusic(musics[p_music],p_loopAmount);
 }
 
-void Audio::playSound(int p_sound, int p_loopAmount){
+void Audio::playSound(int p_sound, int p_loopAmount, int p_channel){
     Mix_Volume(-1,volume);
-    Mix_PlayChannel(-1,sounds[p_sound],p_loopAmount);
+    Mix_PlayChannel(p_channel,sounds[p_sound],p_loopAmount);
+}
+
+void Audio::stopMusic(){
+    if(Mix_PlayingMusic){
+        Mix_HaltMusic();
+    }
 }
 
 void Audio::setVolume(int p_percent){

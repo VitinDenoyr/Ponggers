@@ -1,9 +1,16 @@
 #include "Game.hpp"
 
-void Game::reset(Ball &p_Ball, Paddle &p_p1, Paddle &p_p2){
+int Game::reset(Ball &p_Ball, Paddle &p_p1, Paddle &p_p2){
+    int pconv[6] = {1,3,5,10,100,-1};
     p_Ball.mid(); p_p1.mid(); p_p2.mid();
     p_Ball.setTexture(window.tex[BALL_W]);
     hasLaunched = 0;
+    if(score[0] == pconv[point_limit]){
+        return 1;
+    } else if(score[1] == pconv[point_limit]){
+        return 2;
+    }
+    return 0; 
 }
 
 bool Game::gamestate(){
@@ -19,7 +26,7 @@ void Game::start(Ball &p_ball){
     p_ball.setspeed((strt_dir[direction])*(strt_spd[speed_level]*1.25f),0.05f);
 }
 
-void Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
+bool Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
 {
     p_ball.getPos().x += p_ball.getxs();
     p_ball.getPos().y += p_ball.getys();
@@ -31,12 +38,12 @@ void Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
     float spi[6] = {1.02f, 1.04f, 1.06f, 1.09f, 1.13f, 1.00f};
     if(cdt_passed_p1){ 
         if(cdt_fronts_p1){ 
-            audio.playSound(SOUND_Collision,0);
+            audio.playSound(SOUND_Collision,0,1);
             p_ball.setTexture(window.tex[BALL_B]);
             p_ball.getPos().x = 46;
-            p_ball.getxs() *= -1 * spi[speed_increaser];
+            p_ball.getxs() *= -1;
             if(std::abs(p_ball.getxs()) <= 60){
-                //
+                p_ball.getxs() *= spi[speed_increaser];
             }
             if(std::abs(p_ball.getys()) <= 60){
                 float curvefactor = std::abs(p_ball.getxs())*(p_ball.getPos().y - p_p1.getPos().y - 42.0f)/180.0f;
@@ -45,12 +52,12 @@ void Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
         }
     } else if(cdt_passed_p2){
         if(cdt_fronts_p2){
-            audio.playSound(SOUND_Collision,0);
+            audio.playSound(SOUND_Collision,0,1);
             p_ball.setTexture(window.tex[BALL_R]);
             p_ball.getPos().x = 898;
-            p_ball.getxs() *= -1 * spi[speed_increaser];
+            p_ball.getxs() *= -1;
             if(std::abs(p_ball.getxs()) <= 60){
-                //
+                p_ball.getxs() *= spi[speed_increaser];
             }
             if(std::abs(p_ball.getys()) <= 75){
                 float curvefactor = std::abs(p_ball.getxs())*(p_ball.getPos().y - p_p2.getPos().y - 42.0f)/180.0f;
@@ -59,21 +66,23 @@ void Game::moveBall(Ball &p_ball, Paddle& p_p1, Paddle& p_p2)
         }
     }
     if(p_ball.getPos().y < 0){
-        audio.playSound(SOUND_Collision,0);
+        audio.playSound(SOUND_Collision,0,1);
         p_ball.getPos().y = 0 + (0 - p_ball.getPos().y);
         p_ball.getys() *= -1;
     } else if(p_ball.getPos().y > 524){
-        audio.playSound(SOUND_Collision,0);
+        audio.playSound(SOUND_Collision,0,1);
         p_ball.getPos().y = 524 - (p_ball.getPos().y - 524);
         p_ball.getys() *= -1;
     }
     if(p_ball.getPos().x > 944){
-        reset(p_ball, p_p1, p_p2);
         score[0]++;
-        audio.playSound(SOUND_Point,0);
+        audio.playSound(SOUND_Point,0,1);
+        return 1;
+
     } else if(p_ball.getPos().x < 0){
-        reset(p_ball, p_p1, p_p2);
         score[1]++;
-        audio.playSound(SOUND_Point,0);
+        audio.playSound(SOUND_Point,0,1);
+        return 1;
     }
+    return 0;
 }

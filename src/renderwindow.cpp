@@ -16,6 +16,12 @@ void RenderWindow::textureStart(){
     font = TTF_OpenFont("res/fonts/Peepo.ttf", 36);
     SDL_Color logo_color = {185, 215, 255, 0};
     SDL_Color white_color = {255, 255, 255, 0};
+    
+    // Limpar tex
+    for(SDL_Texture* s : tex){
+        SDL_DestroyTexture(s);
+    }
+    tex.clear();
 
     // Criar texturas por imagem
     tex.push_back(loadTexture("res/images/buttons/button_play.png"));
@@ -43,6 +49,18 @@ void RenderWindow::textureStart(){
     tex.push_back(loadTexture("res/images/buttons/altbox_0.png"));
     tex.push_back(loadTexture("res/images/buttons/altbox_right.png"));
     tex.push_back(loadTexture("res/images/buttons/altbox_left.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_i.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_iii.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_v.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_x.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_c.png"));
+    tex.push_back(loadTexture("res/images/buttons/altbox_inf.png"));
+    tex.push_back(loadTexture("res/images/win/firework_yellow.png"));
+    tex.push_back(loadTexture("res/images/win/firework_blue.png"));
+    tex.push_back(loadTexture("res/images/win/red_cube_win.png"));
+    tex.push_back(loadTexture("res/images/win/red_cube_lose.png"));
+    tex.push_back(loadTexture("res/images/win/blue_cube_win.png"));
+    tex.push_back(loadTexture("res/images/win/blue_cube_lose.png"));
     // Criar texturas por texto/superfície
     std::vector<SDL_Surface*> temp_s = 
     {
@@ -62,7 +80,12 @@ void RenderWindow::textureStart(){
         TTF_RenderText_Solid(font,"Aumento de velocidade",white_color),
         TTF_RenderText_Solid(font,"Sentido inicial da bola",white_color),
         TTF_RenderText_Solid(font,"Jogar contra IA",white_color),
-        TTF_RenderText_Solid(font,"Velocidade do jogador",white_color)
+        TTF_RenderText_Solid(font,"Velocidade do jogador",white_color),
+        TTF_RenderText_Solid(font,"Pontos para ganhar",white_color),
+        TTF_RenderText_Solid(font,"Vencedor:",white_color),
+        TTF_RenderText_Solid(font,"Jogador 1",{0,168,243,0}),
+        TTF_RenderText_Solid(font,"Jogador 2",{236,28,36,0}),
+        TTF_RenderText_Solid(font,"Portal do Ademiro",{177,25,212})
     };
     for(SDL_Surface* s : temp_s){
         tex.push_back(loadTexture(s));
@@ -83,8 +106,16 @@ void RenderWindow::scoreUpdate(int p_score1, int p_score2, Entity &p_ent1, Entit
     p_ent2 = Entity(Vector2f((getPos().w - 36 + 70)/2, 10, 36*(int)(txt_s2.str().length()) , 60),tex[SCORE2]);
 }
 
+void RenderWindow::alterTexture(const char* p_path, int p_texid){
+    SDL_DestroyTexture(tex[p_texid]);
+    tex[p_texid] = loadTexture(p_path);
+}
+
 RenderWindow::~RenderWindow(){
     SDL_HideWindow(window);
+    for(SDL_Texture* s : tex){
+        SDL_DestroyTexture(s);
+    }
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
 }
@@ -121,5 +152,22 @@ void RenderWindow::render(Entity& p_entity){ //Renderiza objeto
     dst.y = p_entity.getPos().y;
     dst.w = p_entity.getPos().w;
     dst.h = p_entity.getPos().h;
+    
     SDL_RenderCopy(renderer,p_entity.getTexture(),NULL,&dst);
+}
+
+void RenderWindow::render(Entity& p_entity, Vector2f &p_portion){ //Renderiza objeto
+    SDL_Rect dst;
+    dst.x = p_entity.getPos().x;
+    dst.y = p_entity.getPos().y;
+    dst.w = p_entity.getPos().w;
+    dst.h = p_entity.getPos().h;
+
+    SDL_Rect src;
+    src.x = p_portion.x;
+    src.y = p_portion.y;
+    src.w = p_portion.w;
+    src.h = p_portion.h;
+
+    SDL_RenderCopy(renderer,p_entity.getTexture(),&src,&dst);
 }

@@ -3,9 +3,9 @@
 bool pong(RenderWindow &window, Game &game, Audio &audio)
 {
     // Recursos usados
-    Ball e_Ball(Vector2f((window.getPos().w - 16)/2,(window.getPos().h - 16)/2, 16, 16),window.tex[BALL_W]);
-    Paddle e_Player1(Vector2f(33,(window.getPos().h - 100)/2, 10, 100),window.tex[PADDLE_1]);
-    Paddle e_Player2(Vector2f(window.getPos().w - 45,(window.getPos().h - 100)/2, 10, 100),window.tex[PADDLE_2]);
+    Ball e_Ball(Vector2f((window.getPos().w - 16)/2,(440 - 16)/2, 16, 16),window.tex[BALL_W]);
+    Paddle e_Player1(Vector2f(33,(440 - 100)/2, 10, 100),window.tex[PADDLE_1]);
+    Paddle e_Player2(Vector2f(window.getPos().w - 45,(440 - 100)/2, 10, 100),window.tex[PADDLE_2]);
     std::vector<Entity> entities =
     {
         Entity(Vector2f((window.getPos().w - 36 - 70)/2, 10, 36 , 60),window.tex[SCORE1]),
@@ -14,6 +14,7 @@ bool pong(RenderWindow &window, Game &game, Audio &audio)
     };
 
     // Loop
+    bool quit = false;
     FPS fps;
     fps.start();
 
@@ -73,8 +74,16 @@ bool pong(RenderWindow &window, Game &game, Audio &audio)
                         e_Player2.move(1);
                     }
                 }
-                game.moveBall(e_Ball,e_Player1,e_Player2);
-
+                bool madePoint = game.moveBall(e_Ball,e_Player1,e_Player2);
+                if(madePoint){
+                    int win = game.reset(e_Ball,e_Player1,e_Player2);
+                    if(win > 0){
+                        audio.playMusic(MUSIC_Victory,999);
+                        quit = !(winner(window,audio,win));
+                        audio.stopMusic();
+                        return !quit;
+                    }
+                }
             }
         }
         fps.delay();

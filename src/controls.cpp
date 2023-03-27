@@ -1,6 +1,6 @@
 #include "Controls.hpp"
 
-bool controls(RenderWindow &window){
+bool controls(RenderWindow &window, Audio &audio){
     //Recursos usados
     SDL_Cursor* cursor_hand = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
     SDL_Cursor* cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
@@ -17,14 +17,14 @@ bool controls(RenderWindow &window){
         Entity(Vector2f((window.getPos().w-240)/2,462,240,60),window.tex[VOLTAR])
     };
     
-    //Loop
+    // Loop
     FPS fps;
     fps.start();
     bool contstate = 1; SDL_Event ev;
     while(contstate){
         // Controle de frames
         fps.update();
-        for (int i = 0; i < fps.updateAmount(); i++){
+        for(int i = 0; i < fps.updateAmount(); i++){
             // Atualizações
             int mousex, mousey;
             SDL_GetMouseState(&mousex,&mousey);
@@ -42,6 +42,7 @@ bool controls(RenderWindow &window){
                     return 0;
                 } else if(ev.type == SDL_MOUSEBUTTONDOWN && ev.button.button == SDL_BUTTON_LEFT){
                     if(condition_is_in_leave){
+                        audio.playSound(SOUND_Click,0,1);
                         SDL_SetCursor(cursor_arrow);
                         contstate = 0;
                     }

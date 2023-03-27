@@ -1,4 +1,4 @@
-#include <Main.hpp>
+#include "Main.hpp"
 
 int main(int argc, char **argv)
 {
@@ -22,18 +22,20 @@ int main(int argc, char **argv)
 
     // Carregar recursos
     bool runstate = true;
+    
     SDL_Color color_white = {255,255,255,0};
     RenderWindow window("Ponggers",960,540);
     std::vector<const char*> musics = {
-
+        "res/sounds/victory.mp3",
+        "res/sounds/admin.mp3"
     };
     std::vector<const char*> sounds = {
         "res/sounds/collision.wav",
-        "res/sounds/point.wav"
+        "res/sounds/point.wav",
+        "res/sounds/click.wav"
     };
     Audio audio(100,sounds,musics);
     Game game(audio, window);
-
     // Loop
     while(runstate)
     {
@@ -42,12 +44,11 @@ int main(int argc, char **argv)
             runstate = pong(window,game,audio);
         }
     }
-
     // Encerramento
     Mix_Quit();
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
-
+    exit(0);
     return 0;
 }
