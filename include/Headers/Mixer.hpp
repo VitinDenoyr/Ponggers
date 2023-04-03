@@ -16,12 +16,17 @@ public:
     int loadMusic(const char* p_file);
     int loadSound(const char* p_file);
     void playMusic(int p_music, int p_loopAmount);
-    void playSound(int p_sound, int p_loopAmount);
+    void playSound(int p_sound, int p_loopAmount, int p_channel);
+    void stopMusic();
     void setVolume(int p_volume);
     int getVolume();
     void pause();
 };
 
 enum SongIds {
-    SOUND_Collision, SOUND_Point
+    SOUND_Collision, SOUND_Point, SOUND_Click
+};
+
+enum MusicIds {
+    MUSIC_Victory, MUSIC_Admin
 };
