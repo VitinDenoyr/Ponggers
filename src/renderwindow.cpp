@@ -16,6 +16,7 @@ void RenderWindow::textureStart(){
     font = TTF_OpenFont("res/fonts/Peepo.ttf", 36);
     SDL_Color logo_color = {185, 215, 255, 0};
     SDL_Color white_color = {255, 255, 255, 0};
+    SDL_Color green_color = {15, 230, 145, 0};
     
     // Limpar tex
     for(SDL_Texture* s : tex){
@@ -24,14 +25,10 @@ void RenderWindow::textureStart(){
     tex.clear();
 
     // Criar texturas por imagem
-    tex.push_back(loadTexture("res/images/buttons/button_play.png"));
-    tex.push_back(loadTexture("res/images/buttons/button_config.png"));
-    tex.push_back(loadTexture("res/images/buttons/button_controls.png"));
     tex.push_back(loadTexture("res/images/controls/w_s.png"));
     tex.push_back(loadTexture("res/images/controls/up_down.png"));
     tex.push_back(loadTexture("res/images/controls/spacebar.png"));
     tex.push_back(loadTexture("res/images/controls/esc.png"));
-    tex.push_back(loadTexture("res/images/buttons/button_return.png"));
     tex.push_back(loadTexture("res/images/buttons/click.png"));
     tex.push_back(loadTexture("res/images/buttons/clicked.png"));
     tex.push_back(loadTexture("res/images/grade.png"));
@@ -61,6 +58,16 @@ void RenderWindow::textureStart(){
     tex.push_back(loadTexture("res/images/win/red_cube_lose.png"));
     tex.push_back(loadTexture("res/images/win/blue_cube_win.png"));
     tex.push_back(loadTexture("res/images/win/blue_cube_lose.png"));
+    tex.push_back(loadTexture("res/images/pong/wall.png"));
+    tex.push_back(loadTexture("res/images/pong/wall_R.png"));
+    tex.push_back(loadTexture("res/images/pong/wall_B.png"));
+    tex.push_back(loadTexture("res/images/powers/zap.png"));
+    tex.push_back(loadTexture("res/images/powers/gravity.png"));
+    tex.push_back(loadTexture("res/images/powers/antigravity.png"));
+    tex.push_back(loadTexture("res/images/powers/wall.png"));
+    tex.push_back(loadTexture("res/images/powers/invert.png"));
+    tex.push_back(loadTexture("res/images/powers/biggify.png"));
+    tex.push_back(loadTexture("res/images/powers/smallify.png"));
     // Criar texturas por texto/superfície
     std::vector<SDL_Surface*> temp_s = 
     {
@@ -85,7 +92,14 @@ void RenderWindow::textureStart(){
         TTF_RenderText_Solid(font,"Vencedor:",white_color),
         TTF_RenderText_Solid(font,"Jogador 1",{0,168,243,0}),
         TTF_RenderText_Solid(font,"Jogador 2",{236,28,36,0}),
-        TTF_RenderText_Solid(font,"Portal do Ademiro",{177,25,212})
+        TTF_RenderText_Solid(font,"Portal do Admin",{177,25,212}),
+        TTF_RenderText_Solid(font,"Voltar",white_color),
+        TTF_RenderText_Solid(font,"Jogar",white_color),
+        TTF_RenderText_Solid(font,"Controles",white_color),
+        TTF_RenderText_Solid(font,"Configurar",white_color),
+        TTF_RenderText_Solid(font,"Mover bola",white_color),
+        TTF_RenderText_Solid(font,"Fundo secreto",white_color),
+        TTF_RenderText_Solid(font,"Mover bola",green_color)
     };
     for(SDL_Surface* s : temp_s){
         tex.push_back(loadTexture(s));

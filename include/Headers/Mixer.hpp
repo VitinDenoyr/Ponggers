@@ -24,7 +24,7 @@ public:
 };
 
 enum SongIds {
-    SOUND_Collision, SOUND_Point, SOUND_Click
+    SOUND_Collision, SOUND_Point, SOUND_Click, SOUND_Powerup, SOUND_Unpower
 };
 
 enum MusicIds {

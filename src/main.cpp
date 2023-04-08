@@ -32,7 +32,9 @@ int main(int argc, char **argv)
     std::vector<const char*> sounds = {
         "res/sounds/collision.wav",
         "res/sounds/point.wav",
-        "res/sounds/click.wav"
+        "res/sounds/click.wav",
+        "res/sounds/powerup.wav",
+        "res/sounds/unpower.wav"
     };
     Audio audio(100,sounds,musics);
     Game game(audio, window);
@@ -40,7 +42,7 @@ int main(int argc, char **argv)
     while(runstate)
     {
         runstate = menu(window,game,audio);
-        if(runstate){ 
+        if(runstate){
             runstate = pong(window,game,audio);
         }
     }

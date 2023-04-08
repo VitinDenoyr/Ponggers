@@ -14,7 +14,7 @@ bool controls(RenderWindow &window, Audio &audio){
         Entity(Vector2f((window.getPos().w-455)/2,197,455,60),window.tex[BORDA_MOVE2]),
         Entity(Vector2f((window.getPos().w-561)/2,282,561,60),window.tex[BORDA_ATIVABOLA]),
         Entity(Vector2f((window.getPos().w-502)/2,367,502,60),window.tex[BORDA_VOLTARAOMENU]),
-        Entity(Vector2f((window.getPos().w-240)/2,462,240,60),window.tex[VOLTAR])
+        Entity(Vector2f((window.getPos().w-155)/2,462,155,60),window.tex[VOLTAR])
     };
     
     // Loop

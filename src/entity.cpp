@@ -26,8 +26,8 @@ void Paddle::move(int p_dir){
     int v[5] = {2,3,4,6,8};
     if(getPos().y + p_dir*v[spd-1] < 0){
         getPos().y = 0;
-    } else if(getPos().y + p_dir*v[spd-1] > 440){
-        getPos().y = 440; 
+    } else if(getPos().y + p_dir*v[spd-1] > 440 - paddle_variation){
+        getPos().y = 440 - paddle_variation; 
     } else {
         getPos().y += p_dir*v[spd-1];
     }
@@ -39,6 +39,10 @@ void Paddle::mid(){
 
 void Paddle::setspeed(int p_speed){
     spd = p_speed;
+}
+
+void Paddle::setvar(int p_value){
+    paddle_variation = p_value;
 }
 
 void Ball::mid()
@@ -59,4 +63,8 @@ float& Ball::getxs(){
 
 float& Ball::getys(){
     return ball_y_speed;
+}
+
+void Power::fall(int p_val){
+    setPos({getPos().x,getPos().y + 0.1f*p_val,getPos().w,getPos().h});
 }

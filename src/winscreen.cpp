@@ -7,7 +7,7 @@ bool winner(RenderWindow &window, Audio &audio, int p_player){
     std::vector<Entity> entities_static = 
     {
         Entity(Vector2f(360,50,240,60),window.tex[VENCEDOR]),
-        Entity(Vector2f((window.getPos().w-240)/2,462,240,60),window.tex[VOLTAR])
+        Entity(Vector2f((window.getPos().w-155)/2,462,155,60),window.tex[VOLTAR])
     };
     std::vector<Entity> entities_anim = 
     {

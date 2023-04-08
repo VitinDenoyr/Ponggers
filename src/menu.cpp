@@ -7,8 +7,8 @@ bool menu(RenderWindow &window, Game &game, Audio &audio)
     SDL_Cursor* cursor_hand = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
     SDL_Cursor* cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
     Entity logo(Vector2f(230,50,500,80),window.tex[LOGO]);
-    Entity btn_jogar(Vector2f((window.getPos().w - 240.0f)/2,(190),240,60),window.tex[PLAY]);
-    Entity btn_config(Vector2f((window.getPos().w - 240.0f)/2,(300),240,60),window.tex[CONFIG]);
+    Entity btn_jogar(Vector2f((window.getPos().w - 140.0f)/2,(190),140,60),window.tex[PLAY]);
+    Entity btn_config(Vector2f((window.getPos().w - 270.0f)/2,(300),270,60),window.tex[CONFIG]);
     Entity btn_controls(Vector2f((window.getPos().w - 240.0f)/2,(410),240,60),window.tex[CONTROLS]);
     
     // Menu loop

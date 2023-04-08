@@ -22,6 +22,10 @@ bool pong(RenderWindow &window, Game &game, Audio &audio)
     game.score[0] = 0; game.score[1] = 0; e_Player1.setspeed(game.player_speed); e_Player2.setspeed(game.player_speed);
     int oldscore[2] = {0,0}; window.scoreUpdate(0,0,entities[0],entities[1]);
 
+    int spawntime = 0; int spawnlimit = 120*14; bool boxtype = 0;
+
+    if(!game.basicPowers && game.specialPowers) boxtype = 1;
+
     bool gamestate = 1; SDL_Event ev;
     while(gamestate){
         fps.update();
@@ -37,30 +41,53 @@ bool pong(RenderWindow &window, Game &game, Audio &audio)
             {
                 gamestate = 0;
             }
-            if (keyboard[SDL_SCANCODE_SPACE] && !game.gamestate()){
+            if (keyboard[SDL_SCANCODE_SPACE] && !game.hasLaunched){
                 game.start(e_Ball);
             }
-            if(game.gamestate()){ // Movimenta jogadores
-                if (keyboard[SDL_SCANCODE_W])
+            if(game.hasLaunched){ // Movimenta jogadores
+                if(keyboard[SDL_SCANCODE_W])
                 {
                     e_Player1.move(-1);
                 }
-                if (keyboard[SDL_SCANCODE_S])
+                if(keyboard[SDL_SCANCODE_S])
                 {
                     e_Player1.move(1);
+                }
+                int adminMoving = 0;
+                if(game.adminMove){
+                    if(keyboard[SDL_SCANCODE_F])
+                    {
+                        e_Ball.getPos().x -= 5;
+                        adminMoving = 1;
+                    }
+                    if(keyboard[SDL_SCANCODE_H])
+                    {
+                        e_Ball.getPos().x += 5;
+                        adminMoving = 1;
+                    }
+                    if(keyboard[SDL_SCANCODE_T])
+                    {
+                        e_Ball.getPos().y -= 5;
+                        adminMoving = 1;
+                    }
+                    if(keyboard[SDL_SCANCODE_G])
+                    {
+                        e_Ball.getPos().y += 5;
+                        adminMoving = 1;
+                    }
                 }
                 if(game.use_ia){
                     Ball* closerBall = &e_Ball;
                     if(closerBall->getxs() < 0){
-                        if(e_Player2.getPos().y > 220){
+                        if(e_Player2.getPos().y > (window.getPos().h - e_Player2.getPos().h)/2){
                             e_Player2.move(-1);
-                        } else if(e_Player2.getPos().y < 220-game.player_speed) {
+                        } else if(e_Player2.getPos().y < (window.getPos().h - e_Player2.getPos().h)/2-game.player_speed) {
                             e_Player2.move(1);
                         }
                     } else {
-                        if((closerBall->getPos().y + 8) > (e_Player2.getPos().y+50)){
+                        if((closerBall->getPos().y + 8) > (e_Player2.getPos().y+e_Player2.getPos().h/2)){
                             e_Player2.move(1);
-                        } else if((closerBall->getPos().y + 8) < (e_Player2.getPos().y+50-game.player_speed)) {
+                        } else if((closerBall->getPos().y + 8) < (e_Player2.getPos().y+e_Player2.getPos().h/2-game.player_speed)) {
                             e_Player2.move(-1);
                         }
                     }
@@ -74,8 +101,28 @@ bool pong(RenderWindow &window, Game &game, Audio &audio)
                         e_Player2.move(1);
                     }
                 }
-                bool madePoint = game.moveBall(e_Ball,e_Player1,e_Player2);
+                bool madePoint = 0;
+                if(!adminMoving) madePoint = game.moveBall(e_Ball,e_Player1,e_Player2);
+                if(game.basicPowers || game.specialPowers){ // poderes
+                    spawntime++;
+                    game.powerMovement(e_Ball,e_Player1,e_Player2);
+                    if(spawntime >= spawnlimit){
+                        spawntime = 0;
+                        if(game.powers.size() == 0){
+                            game.addPower(boxtype);
+                            if(game.basicPowers && game.specialPowers){
+                                int rng = (SDL_GetTicks64()%113);
+                                if(rng%2 == 0){
+                                    boxtype = 0;
+                                } else {
+                                    boxtype = 1;
+                                }
+                            }
+                        }
+                    }
+                }
                 if(madePoint){
+                    spawntime = 0;
                     int win = game.reset(e_Ball,e_Player1,e_Player2);
                     if(win > 0){
                         audio.playMusic(MUSIC_Victory,999);
@@ -97,6 +144,15 @@ bool pong(RenderWindow &window, Game &game, Audio &audio)
 
         // Renderizar e Desenhar
         window.clear();
+        for(Power p : game.powers){
+            if(!p.active){
+                window.render(p);
+            } else if (p.powerId == SPOW_MIDWALL){
+                for(Entity* e : p.positions){
+                    window.render(*e);
+                }
+            }
+        }
         for(Entity e : entities){
             window.render(e);
         }
